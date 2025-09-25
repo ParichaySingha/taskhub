@@ -171,7 +171,6 @@ const ArchivedTasks = () => {
                         <div className="flex gap-2 mr-2">
                           <Archive className="size-4 text-orange-500" />
                         </div>
-
                         <div>
                           <Link
                             to={`/dashboard/workspaces/${task.project?.workspace || 'unknown'}/projects/${task.project?._id || 'unknown'}/tasks/${task._id}`}

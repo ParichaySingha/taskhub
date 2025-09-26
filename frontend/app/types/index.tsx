@@ -103,6 +103,8 @@ export interface Task {
   attachments?: Attachment[];
   estimatedTime?: EstimatedTime;
   timeTracking?: TimeTracking;
+  requiresVerification?: boolean;
+  pendingVerification?: string;
 }
 
 export interface Attachment {

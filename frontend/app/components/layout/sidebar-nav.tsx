@@ -43,7 +43,7 @@ export const SidebarNav = ({
             } else {
               navigate(el.href);
             }
-          } else if (el.href === "/archived-tasks" || el.href === "/my-tasks" || el.href === "/members" || el.href === "/calendar" || el.href === "/notifications") {
+          } else if (el.href === "/archived-tasks" || el.href === "/my-tasks" || el.href === "/members" || el.href === "/calendar" || el.href === "/notifications" || el.href === "/verifications") {
             // These routes don't need workspace ID in the path
             navigate(el.href);
           } else {

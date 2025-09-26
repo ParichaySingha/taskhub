@@ -1,4 +1,4 @@
-import { Archive, Bell, Calendar, CheckCircle2, ChevronsLeft, ChevronsRight, LayoutDashboard, ListCheck, LogOut, Settings, Users, Wrench } from "lucide-react";
+import { Archive, Bell, Calendar, CheckCircle2, ChevronsLeft, ChevronsRight, LayoutDashboard, ListCheck, LogOut, Settings, Users, Wrench, Shield } from "lucide-react";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
 import { useAuth } from "~/provider/auth-context";
@@ -58,6 +58,11 @@ export const SidebarComponent = ({
       title: "Archived",
       icon: Archive,
       href: "/archived-tasks",
+    },
+    {
+      title: "Verifications",
+      icon: Shield,
+      href: "/verifications",
     },
     {
       title: "Settings",

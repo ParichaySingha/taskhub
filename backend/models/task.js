@@ -69,6 +69,11 @@ const taskSchema = new Schema(
     ],
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     isArchived: { type: Boolean, default: false },
+    requiresVerification: { type: Boolean, default: false },
+    pendingVerification: {
+      type: Schema.Types.ObjectId,
+      ref: "Verification",
+    },
   },
   { timestamps: true }
 );

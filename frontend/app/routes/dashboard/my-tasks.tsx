@@ -1,5 +1,5 @@
 import { format } from "date-fns/format";
-import { ArrowUpRight, CheckCircle, Clock, FilterIcon, TestTube } from "lucide-react";
+import { ArrowUpRight, CheckCircle, Clock, FilterIcon, TestTube, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { Loader } from "~/components/loader";
@@ -228,6 +228,13 @@ const MyTasks = () => {
 
                             {task.isArchived && (
                               <Badge variant={"outline"}>Archived</Badge>
+                            )}
+
+                            {task.requiresVerification && (
+                              <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 flex items-center gap-1">
+                                <Shield className="h-3 w-3" />
+                                <span className="text-xs">Verification</span>
+                              </Badge>
                             )}
                           </div>
                         </div>

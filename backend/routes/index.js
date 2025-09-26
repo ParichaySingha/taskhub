@@ -5,6 +5,7 @@ import projectRoutes from "./project.js";
 import userRoutes from "./user.js";
 import taskRoutes from "./task.js";
 import notificationRoutes from "./notification.js";
+import verificationRoutes from "./verification.js";
 
 const router = express.Router();
 
@@ -19,5 +20,7 @@ router.use("/task", taskRoutes);
 router.use("/projects", projectRoutes);
 
 router.use("/notifications", notificationRoutes);
+
+router.use("/verifications", verificationRoutes);
 
 export default router;

@@ -184,7 +184,7 @@ const TaskDetails = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <TaskStatusSelector status={task.status} taskId={task._id} />
+                  <TaskStatusSelector status={task.status} taskId={task._id} task={task} />
 
                   <Button
                     variant={"destructive"}

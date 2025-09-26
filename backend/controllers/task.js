@@ -4,6 +4,7 @@ import Comment from "../models/comment.js";
 import Project from "../models/project.js";
 import Task from "../models/task.js";
 import Workspace from "../models/workspace.js";
+import Verification from "../models/verification.js";
 import { createAndSendNotification } from "./notification.js";
 
 const createTask = async (req, res) => {
@@ -232,7 +233,7 @@ const updateTaskStatus = async (req, res) => {
     const { taskId } = req.params;
     const { status } = req.body;
 
-    const task = await Task.findById(taskId);
+    const task = await Task.findById(taskId).populate('project');
 
     if (!task) {
       return res.status(404).json({
@@ -260,6 +261,93 @@ const updateTaskStatus = async (req, res) => {
 
     const oldStatus = task.status;
 
+    // Check if user is assigned to the task
+    const isAssigned = task.assignees.some(
+      assignee => assignee.toString() === req.user._id.toString()
+    );
+
+    // Check if user is project manager/owner
+    const isManager = project.members.some(
+      member => member.user.toString() === req.user._id.toString() && 
+      (member.role === "manager" || member.role === "owner")
+    );
+
+    // If user is assigned but not a manager, they need verification for status changes
+    if (isAssigned && !isManager && oldStatus !== status) {
+      // Check if there's already a pending verification
+      const existingVerification = await Verification.findOne({
+        task: taskId,
+        status: "pending"
+      });
+
+      if (existingVerification) {
+        return res.status(400).json({
+          message: "There is already a pending verification for this task. Please wait for approval.",
+        });
+      }
+
+      // Create verification request
+      const projectOwner = project.members.find(
+        member => member.role === "manager" || member.role === "owner"
+      );
+
+      if (!projectOwner) {
+        return res.status(400).json({
+          message: "No project manager found to verify this request",
+        });
+      }
+
+      const verification = await Verification.create({
+        task: taskId,
+        project: task.project,
+        workspace: project.workspace,
+        requestedBy: req.user._id,
+        requestedFor: projectOwner.user,
+        currentStatus: oldStatus,
+        requestedStatus: status,
+        reason: `Status change request from ${oldStatus} to ${status}`,
+      });
+
+      // Update task to require verification
+      task.requiresVerification = true;
+      task.pendingVerification = verification._id;
+      await task.save();
+
+      // Record activity
+      await recordActivity(req.user._id, "requested_verification", "Task", taskId, {
+        description: `requested verification to change status from ${oldStatus} to ${status}`,
+      });
+
+      // Send notification to project owner
+      const io = req.app.get('io');
+      try {
+        await createAndSendNotification(io, {
+          recipient: projectOwner.user,
+          sender: req.user._id,
+          type: "verification_requested",
+          title: "Verification Request",
+          message: `${req.user.name} requested verification to change task "${task.title}" status from ${oldStatus} to ${status}`,
+          data: {
+            taskId: task._id,
+            projectId: task.project,
+            workspaceId: project.workspace,
+            verificationId: verification._id,
+          },
+          workspace: project.workspace,
+        });
+      } catch (error) {
+        console.log("Error sending verification notification:", error);
+      }
+
+      return res.status(200).json({
+        message: "Status change request submitted for verification",
+        requiresVerification: true,
+        verificationId: verification._id,
+        task: task
+      });
+    }
+
+    // If user is manager/owner or status change doesn't require verification, proceed normally
     // Handle Archive status specially
     if (status === "Archive") {
       task.isArchived = true;

@@ -1,5 +1,5 @@
 import { format } from "date-fns/format";
-import { AlertCircle, Calendar, CheckCircle, Clock, Loader, MoreHorizontal, Edit, Trash2, TestTube } from "lucide-react";
+import { AlertCircle, Calendar, CheckCircle, Clock, Loader, MoreHorizontal, Edit, Trash2, TestTube, Shield } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { useNavigate, useParams } from "react-router";
@@ -343,17 +343,26 @@ const TaskCard = ({ task, onClick }: { task: Task; onClick: () => void }) => {
     >
       <CardHeader>
         <div className="flex items-center justify-between">
-          <Badge
-            className={
-              task.priority === "High"
-                ? "bg-red-500 text-white"
-                : task.priority === "Medium"
-                ? "bg-orange-500 text-white"
-                : "bg-slate-500 text-white"
-            }
-          >
-            {task.priority}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge
+              className={
+                task.priority === "High"
+                  ? "bg-red-500 text-white"
+                  : task.priority === "Medium"
+                  ? "bg-orange-500 text-white"
+                  : "bg-slate-500 text-white"
+              }
+            >
+              {task.priority}
+            </Badge>
+            
+            {task.requiresVerification && (
+              <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 flex items-center gap-1">
+                <Shield className="h-3 w-3" />
+                <span className="text-xs">Verification</span>
+              </Badge>
+            )}
+          </div>
 
           <div className="flex gap-1">
             {task.status !== "To Do" && (

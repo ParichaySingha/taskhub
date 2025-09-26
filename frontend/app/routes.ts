@@ -20,6 +20,7 @@ export default [
     route("/archived-tasks", "routes/dashboard/archived-tasks.tsx"),
     route("/notifications", "routes/dashboard/notifications.tsx"),
     route("/members", "routes/dashboard/members.tsx"),
+    route("/verifications", "routes/dashboard/verifications.tsx"),
     route("/settings", "routes/dashboard/settings.tsx"),
   ]),
 

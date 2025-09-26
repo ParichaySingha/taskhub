@@ -1,7 +1,6 @@
 import { useAuth } from "~/provider/auth-context";
 import { useVerifications } from "~/hooks/use-verification";
 import { VerificationCard } from "~/components/verification/verification-card";
-import { VerificationStats } from "~/components/verification/verification-stats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
@@ -87,7 +86,7 @@ export default function VerificationsPage() {
       </div>
 
       {/* Stats Cards */}
-      {stats && (
+      {Boolean(stats && typeof stats === 'object') && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -95,7 +94,7 @@ export default function VerificationsPage() {
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total || 0}</div>
+              <div className="text-2xl font-bold">{(stats as any)?.total || 0}</div>
             </CardContent>
           </Card>
           <Card>
@@ -104,7 +103,7 @@ export default function VerificationsPage() {
               <Clock className="h-4 w-4 text-yellow-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">{stats.pending || 0}</div>
+              <div className="text-2xl font-bold text-yellow-600">{(stats as any)?.pending || 0}</div>
             </CardContent>
           </Card>
           <Card>
@@ -113,7 +112,7 @@ export default function VerificationsPage() {
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.approved || 0}</div>
+              <div className="text-2xl font-bold text-green-600">{(stats as any)?.approved || 0}</div>
             </CardContent>
           </Card>
           <Card>
@@ -122,7 +121,7 @@ export default function VerificationsPage() {
               <XCircle className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.rejected || 0}</div>
+              <div className="text-2xl font-bold text-red-600">{(stats as any)?.rejected || 0}</div>
             </CardContent>
           </Card>
         </div>
@@ -150,9 +149,9 @@ export default function VerificationsPage() {
                   <RefreshCw className="h-6 w-6 animate-spin" />
                   <span className="ml-2">Loading requests...</span>
                 </div>
-              ) : verificationRequests && verificationRequests.length > 0 ? (
+              ) : verificationRequests && (verificationRequests as any[]).length > 0 ? (
                 <div className="space-y-4">
-                  {verificationRequests.map((verification) => (
+                  {(verificationRequests as any[]).map((verification) => (
                     <VerificationCard
                       key={verification._id}
                       verification={verification}
@@ -184,9 +183,9 @@ export default function VerificationsPage() {
                   <RefreshCw className="h-6 w-6 animate-spin" />
                   <span className="ml-2">Loading requests...</span>
                 </div>
-              ) : verificationRequests && verificationRequests.length > 0 ? (
+              ) : verificationRequests && (verificationRequests as any[]).length > 0 ? (
                 <div className="space-y-4">
-                  {verificationRequests.map((verification) => (
+                  {(verificationRequests as any[]).map((verification) => (
                     <VerificationCard
                       key={verification._id}
                       verification={verification}
@@ -219,9 +218,9 @@ export default function VerificationsPage() {
                   <RefreshCw className="h-6 w-6 animate-spin" />
                   <span className="ml-2">Loading requests...</span>
                 </div>
-              ) : verificationRequests && verificationRequests.length > 0 ? (
+              ) : verificationRequests && (verificationRequests as any[]).length > 0 ? (
                 <div className="space-y-4">
-                  {verificationRequests.map((verification) => (
+                  {(verificationRequests as any[]).map((verification) => (
                     <VerificationCard
                       key={verification._id}
                       verification={verification}
@@ -254,9 +253,9 @@ export default function VerificationsPage() {
                   <RefreshCw className="h-6 w-6 animate-spin" />
                   <span className="ml-2">Loading my requests...</span>
                 </div>
-              ) : myVerificationRequests && myVerificationRequests.length > 0 ? (
+              ) : myVerificationRequests && (myVerificationRequests as any[]).length > 0 ? (
                 <div className="space-y-4">
-                  {myVerificationRequests.map((verification) => (
+                  {(myVerificationRequests as any[]).map((verification) => (
                     <VerificationCard
                       key={verification._id}
                       verification={verification}

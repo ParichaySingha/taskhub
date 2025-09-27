@@ -336,7 +336,13 @@ export const useUploadAttachmentMutation = () => {
       const formData = new FormData();
       formData.append('attachment', data.file);
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/task/${data.taskId}/attachments`, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      
+      if (!apiUrl) {
+        throw new Error('VITE_API_URL environment variable is not set');
+      }
+      
+      const response = await fetch(`${apiUrl}/task/${data.taskId}/attachments`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -381,7 +387,13 @@ export const useDeleteAttachmentMutation = () => {
 export const useDownloadAttachment = () => {
   return useMutation({
     mutationFn: async (data: { taskId: string; attachmentId: string }) => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/task/${data.taskId}/attachments/${data.attachmentId}/download`, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      
+      if (!apiUrl) {
+        throw new Error('VITE_API_URL environment variable is not set');
+      }
+      
+      const response = await fetch(`${apiUrl}/task/${data.taskId}/attachments/${data.attachmentId}/download`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

@@ -119,7 +119,14 @@ export const useNotifications = ({ workspaceId }: UseNotificationsProps = {}) =>
   useEffect(() => {
     if (!user) return;
 
-    const newSocket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:5000", {
+    const backendUrl = import.meta.env.VITE_API_URL;
+    
+    if (!backendUrl) {
+      console.error('VITE_BACKEND_URL environment variable is not set');
+      return;
+    }
+    
+    const newSocket = io(backendUrl, {
       withCredentials: true,
     });
 

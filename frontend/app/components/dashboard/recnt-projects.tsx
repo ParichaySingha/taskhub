@@ -15,7 +15,10 @@ export const RecentProjects = ({ data }: { data: Project[] }) => {
         <CardTitle>Recent Projects</CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className={cn(
+        "space-y-4",
+        data.length > 4 && "max-h-96 overflow-y-auto"
+      )}>
         {data.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">
             No Recent project yet

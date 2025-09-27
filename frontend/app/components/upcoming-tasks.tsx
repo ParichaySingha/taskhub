@@ -22,7 +22,10 @@ export const UpcomingTasks = ({ data }: { data: Task[] }) => {
         <CardDescription>Here are the tasks that are due soon</CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className={cn(
+        "space-y-4",
+        data.length > 5 && "max-h-96 overflow-y-auto"
+      )}>
         {data.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">
             No upcoming tasks yet
